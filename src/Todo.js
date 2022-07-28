@@ -3,8 +3,10 @@ import Item from "./item";
 import "./Todo.css";
 import List from "./components/List";
 import TodoForm from "./components/TodoForm";
+import Modal from "./components/Modal";
 
 function Todo() {
+    const [showModal, setShowModal] = useState(false);
     const [items, setItens] = useState([]);
 
     useEffect(() => {
@@ -24,6 +26,7 @@ function Todo() {
         //Colocando o obj no array de objetos!
 
         setItens([...items, item]);
+        onHideModal();
     }
 
     function onDeletedItems(item) {
@@ -47,17 +50,35 @@ function Todo() {
         setItens(updatedItems);
     }
 
+    function onHideModal() {
+        setShowModal(false);
+    }
+
     return (
         <div className="container">
-            <h1>TO-DO</h1>
+            {/*  */}
 
-            <TodoForm onAdd={onAddItem}></TodoForm>
+            <header className="header">
+                <h1>TO-DO</h1>
+                <button
+                    className="add"
+                    onClick={() => {
+                        setShowModal(true);
+                    }}
+                >
+                    +
+                </button>
+            </header>
 
             <List
                 onDone={onDone}
                 onDeletedItems={onDeletedItems}
                 items={items}
             ></List>
+
+            <Modal show={showModal} onHideModal={onHideModal}>
+                <TodoForm onAdd={onAddItem}></TodoForm>
+            </Modal>
         </div>
     );
 }
